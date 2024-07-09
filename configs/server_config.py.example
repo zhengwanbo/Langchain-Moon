@@ -101,6 +101,9 @@ FSCHAT_MODEL_WORKERS = {
     "ollama": {
         "port": 31001,
     },
+    "xinfer": {
+        "port": 31002,
+    },
     "zhipu-api": {
         "port": 21001,
     },

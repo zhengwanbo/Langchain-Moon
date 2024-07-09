@@ -1,6 +1,7 @@
 from .base import *
 from .zhipu import ChatGLMWorker
 from .ollama import OllamaWorker
+from .xinfer import XinferWorker
 from .minimax import MiniMaxWorker
 from .xinghuo import XingHuoWorker
 from .qianfan import QianFanWorker
