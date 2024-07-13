@@ -1,0 +1,93 @@
+
+1. conda python
+
+https://docs.conda.io/projects/miniconda/en/latest/
+
+mkdir -p ~/miniconda3
+curl https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-arm64.sh -o ~/miniconda3/miniconda.sh
+curl https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -o ~/miniconda3/miniconda.sh
+bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3
+rm -rf ~/miniconda3/miniconda.sh
+
+
+./miniconda3/bin/conda init
+source .bashrc
+
+conda create -n chatchat python=3.11
+
+zsh .zshrc
+
+conda activate llm
+
+export LANG=zh_CN.UTF-8
+
+vi /Users/wanzheng/.config/pip/pip.conf
+[global]
+index-url = https://pypi.tuna.tsinghua.edu.cn/simple
+
+
+2、install Langchain-Moon
+
+# 拉取仓库
+$ git clone https://github.com/zhengwanbo/Langchain-Moon.git
+
+# 进入目录
+$ cd Langchain-Moon
+
+# 安装全部依赖
+$ pip install -r requirements.txt
+$ pip install -r requirements_api.txt
+$ pip install -r requirements_webui.txt
+
+$ python -m pip install oracledb
+
+#下载模型需要先安装 Git LFS ，然后运行
+
+$ mkdir models
+$ cd models
+
+yum -y install git-lfs
+
+$ git lfs install
+$ git-lfs clone https://huggingface.co/THUDM/chatglm3-6b
+$ git-lfs clone https://huggingface.co/BAAI/bge-large-zh
+$ git-lfs clone https://huggingface.co/BAAI/bge-large-zh-v1.5
+$ git-lfs clone https://huggingface.co/moka-ai/m3e-large
+
+#按照下列方式初始化自己的知识库和简单的复制配置文件
+
+$ python copy_config_example.py
+
+修改configs/server_config.py相关内容
+    "chatglm3-6b": { "device": "cuda", }, "Qwen1.5-0.5B-Chat": { "device": "cuda", },
+改为：
+    "chatglm3-6b": { "device": "auto", }, "Qwen1.5-0.5B-Chat": { "device": "auto", },
+
+$ python init_database.py --recreate-vs
+
+#按照以下命令启动项目
+$ python startup.py -a
+
+3、添加Oracle DB 作为 向量数据库
+python -m pip install oracledb
+cp server/knowledge_base/kb_service/oracle_vector_prepare.py ~/anaconda3/envs/chatchat/lib/python3.11/site-packages/langchain_community/vectorstores/
+
+
+#修改oracle 连接信息
+vi config/kb_config.py
+
+        "connection_uri": "ogg/ogg@127.0.0.1:1521/orclpdb1",
+
+
+#按照以下命令启动项目
+$ python startup.py -a
+
+#mac 上下载ollama
+https://ollama.com/download 
+
+#安装后下载大模型
+ollama pull qwen:7b
+
+
+
+
